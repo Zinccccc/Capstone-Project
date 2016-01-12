@@ -20,6 +20,10 @@ public class SSUMenu {
         Gson gson = new Gson();
 
         menuArrayList = parseHTML();
+
+        for(int i = 0; i < menuArrayList.size(); i++){
+            System.out.println(menuArrayList.get(i).getMenu());
+        }
         result = gson.toJson(menuArrayList);
 
         return result;
@@ -43,32 +47,33 @@ public class SSUMenu {
         String price;
         String menuStr;
         String day;
+        String mType;
         String[] menuType = {"Breakfast", "Lunch", "Lunch2", "Lunch3", "Dinner"};
         int cnt = 0;
         int day_flag = 0;
 
         ArrayList<Menu> menuArrayList = new ArrayList<>();
-        Menu menu = new Menu();
 
         try {
             //connect with web page
             Document doc = Jsoup.connect("http://m.ssu.ac.kr/html/themes/m/html/etc_menulist.jsp").get();
 
-
             do {
                 day = getDate(day_flag);
                 //select Today's menu
                 Elements dayMenu = doc.select(".weeklymenu-" + day);
-                menu.setDate(day);
                 System.out.println("day : " + day);
                 for (Element timeMenu : dayMenu) {
                     cnt = 0;
                     Elements tmenu = timeMenu.select(".frame-b");
                     for (Element t : tmenu) {
-                        menu.setTime(menuType[cnt]);
-                        System.out.println("title : " + menuType[cnt++]);
+                        mType = menuType[cnt++];
+                        System.out.println("title : " + mType);
                         Elements cafeteria_type = t.select(".basic");
                         for (Element e : cafeteria_type) {
+                            Menu menu = new Menu();
+                            menu.setDate(day);
+                            menu.setTime(mType);
                             type = e.select("strong").first().text();
                             menu.setCafeteria_type(type);
                             System.out.println("Cafeteria_type : " + type);

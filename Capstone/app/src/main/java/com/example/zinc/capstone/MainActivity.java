@@ -65,14 +65,15 @@ public class MainActivity extends AppCompatActivity
             try
             {
                 SSUMenu ssuMenu = new SSUMenu();
-                ssuMenu.parseHTML();
-//                result = ssuMenu.getMenu();
+//                ssuMenu.parseHTML();
+                result = ssuMenu.getMenuJson();
 
             }
             catch (Exception e)
             {
                 e.printStackTrace();
             }
+            System.out.println(result);
             return result;
         }
 
