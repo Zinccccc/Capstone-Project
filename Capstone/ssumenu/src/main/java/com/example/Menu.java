@@ -4,13 +4,31 @@ package com.example;
  * Created by zinc on 16. 1. 12..
  */
 public class Menu {
-
     private String date;
     private String time;    //breakfast, lunch, or dinner
     private String cafeteria_type;
     private String menu;
     private String price;
 
+    public String getDate() {
+        return date;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public String getCafeteria_type() {
+        return cafeteria_type;
+    }
+
+    public String getMenu() {
+        return menu;
+    }
+
+    public String getPrice() {
+        return price;
+    }
     public void setDate(String date) {
         this.date = date;
     }

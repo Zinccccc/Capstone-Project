@@ -61,11 +61,13 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         protected String doInBackground(Void... params) {
-            String result = "";
+            String result = "Hi";
             try
             {
                 SSUMenu ssuMenu = new SSUMenu();
-                result = ssuMenu.getMenu();
+                ssuMenu.parseHTML();
+//                result = ssuMenu.getMenu();
+
             }
             catch (Exception e)
             {
