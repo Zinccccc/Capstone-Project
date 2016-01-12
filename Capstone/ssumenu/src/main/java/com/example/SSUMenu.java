@@ -7,6 +7,7 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class SSUMenu {
@@ -21,9 +22,17 @@ public class SSUMenu {
     }
 
     public String getMenu() {
-        Menu menu = new Menu();
+        String type;
+        String price;
+        String menuStr;
         String today = getDate(0);
         String tomorrow = getDate(1);
+        String[] menuType = {"Breakfast", "Lunch", "Lunch2", "Lunch3", "Dinner"};
+        int cnt = 0;
+
+        ArrayList<Menu> menuArrayList = new ArrayList<>();
+        Menu menu = new Menu();
+
         try {
             //connect with web page
             Document doc = Jsoup.connect("http://m.ssu.ac.kr/html/themes/m/html/etc_menulist.jsp").get();
@@ -34,22 +43,32 @@ public class SSUMenu {
             menu.setDate(today);
             System.out.println("today : " + today);
             for(Element timeMenu:todayMenu){
-                menu.setTime(timeMenu.select(".title").text());
-                System.out.println("title : " + timeMenu.select(".title").text());
-                Elements cafeteria_type = timeMenu.select(".basic");
-                for(Element e:cafeteria_type){
-                    menu.setCafeteria_type(e.select("strong").first().text());
-                    System.out.println("Cafeteria_type : " + e.select("strong").first().text());
+                cnt = 0;
+                Elements tmenu = timeMenu.select(".frame-b");
+                for(Element t:tmenu) {
+                    menu.setTime(menuType[cnt]);
+                    System.out.println("title : " + menuType[cnt++]);
+                    Elements cafeteria_type = t.select(".basic");
+                    for (Element e : cafeteria_type) {
+                        type = e.select("strong").first().text();
+                        menu.setCafeteria_type(type);
+                        System.out.println("Cafeteria_type : " + type);
 
-                    menu.setMenu(e.text());
-                    System.out.println("menu : "+e.text());
+                        price = e.select("strong").last().text();
+                        menu.setPrice(price);
+                        System.out.println("Price : " + price);
 
+                        // the data format of food court is different from others
+                        if (price != null)
+                            menuStr = e.text().substring(type.length() + 1, e.text().length() - price.length() - 1);
+                        else
+                            menuStr = e.text().substring(type.length() + 1, e.text().length());
 
-                    menu.setPrice(e.select("strong").last().text());
-                    System.out.println("Price : " + e.select("strong").last().text());
+                        menu.setMenu(menuStr);
+                        System.out.println("menu : " + menuStr);
+                        menuArrayList.add(menu);
+                    }
                 }
-//                e.select("title");
-//                System.out.println(e.select(".title"));
             }
 
         } catch (IOException e) {
