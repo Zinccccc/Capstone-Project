@@ -6,6 +6,7 @@
 
 package com.example.zinc.myapplication.backend;
 
+import com.example.SSUMenu;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
@@ -27,14 +28,14 @@ import javax.inject.Named;
 public class MyEndpoint {
 
     /**
-     * A simple endpoint method that takes a name and says Hi back
+     * A simple endpoint method that get menus from ssumenu and return it
      */
-    @ApiMethod(name = "sayHi")
-    public MyBean sayHi(@Named("name") String name) {
-        MyBean response = new MyBean();
-        response.setData("Hi, " + name);
 
+    @ApiMethod(name = "getMenuJSON")
+    public MyBean getMenuJSON(){
+        MyBean response = new MyBean();
+        SSUMenu ssuMenu = new SSUMenu();
+        response.setData(ssuMenu.getMenuJson());
         return response;
     }
-
 }
