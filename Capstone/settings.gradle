@@ -1,1 +1,1 @@
-include ':app', ':ssumenu'
+include ':app', ':ssumenu', ':backend'

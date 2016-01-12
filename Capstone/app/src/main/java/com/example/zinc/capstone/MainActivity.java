@@ -1,5 +1,6 @@
 package com.example.zinc.capstone;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -47,12 +48,38 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         textView = (TextView)findViewById(R.id.info_text);
-        showMenu();
+        feed();
     }
 
-    public void showMenu(){
-        SSUMenu ssuMenu = new SSUMenu();
-        textView.setText(ssuMenu.getMenu());
+    private void feed()
+    {
+        new ProcessFacebookTask().execute(null,null,null);
+    }
+
+    //AsyncTask<Params,Progress,Result>
+    private class ProcessFacebookTask extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected String doInBackground(Void... params) {
+            String result = "";
+            try
+            {
+                SSUMenu ssuMenu = new SSUMenu();
+                result = ssuMenu.getMenu();
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String result){
+            if(result != null) {
+                textView.setText(result);
+            }
+        }
     }
 
     @Override
