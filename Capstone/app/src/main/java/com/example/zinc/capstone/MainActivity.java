@@ -109,7 +109,8 @@ public class MainActivity extends AppCompatActivity
             intent = new Intent(this, InfoActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_location) {
-
+            intent = new Intent(this, MapsActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_about) {
             intent = new Intent(this, AboutActivity.class);
             startActivity(intent);
