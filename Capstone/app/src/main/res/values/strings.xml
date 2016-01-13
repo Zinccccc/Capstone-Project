@@ -38,4 +38,7 @@
 
     <string name="operating_hour">운영시간</string>
 
+
+    <string name="interstitial_ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="ad_button">This is AD Button</string>
 </resources>
