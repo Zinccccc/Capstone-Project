@@ -70,5 +70,16 @@
     <string name="title_activity_about">About this App</string>
 
     <string name="action_share">Share</string>
+    <string name="title_activity_info">Cafeteria Information</string>
+
+    <string name="student_cafe">학생식당</string>
+    <string name="worker_cafe">교직원식당</string>
+    <string name="food_court">푸드코트</string>
+    <string name="info_student_cafe">Mon ~ Fri / 10:20 ~ 14:00 (Lunch)</string>
+    <string name="info_worker_cafe">Mon ~ Fri / 11:20 ~ 14:00 (Lunch)</string>
+    <string name="info_worker_cafe2">Mon ~ Fri / 17:00 ~ 18:00 (Dinner)</string>
+    <string name="info_food_court">Mon ~ Fri / 10:20 ~ 15:00</string>
+
+    <string name="operating_hour">운영시간</string>
 
 </resources>
