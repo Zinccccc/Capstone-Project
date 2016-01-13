@@ -21,6 +21,10 @@
             </intent-filter>
         </activity>
 
+        <provider
+            android:name=".MenusProvider"
+            android:authorities="zinc.capstone" />
+
     </application>
 
 </manifest>

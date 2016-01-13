@@ -15,18 +15,14 @@ public class MenusProvider extends ContentProvider
 {
     private static MenusDBHelper mOpenHelper;
     private UriMatcher muriMatcher = buildUriMatcher();
-    private static final int MENUS_WITH_DATE = 100;
+    private static final int MENUS = 100;
 
 
     private static final SQLiteQueryBuilder MenuQuery =
             new SQLiteQueryBuilder();
-    private static final String MENUS_BY_DATE =
-            DatabaseContract.menus_table.DATE + " = ?";
-
     static UriMatcher buildUriMatcher() {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = DatabaseContract.BASE_CONTENT_URI.toString();
-        matcher.addURI(authority, "date" , MENUS_WITH_DATE);
         return matcher;
     }
     @Override
@@ -46,7 +42,7 @@ public class MenusProvider extends ContentProvider
     public String getType(Uri uri)
     {
         final int match = muriMatcher.match(uri);
-        if (match == MENUS_WITH_DATE) {
+        if (match == MENUS) {
             return DatabaseContract.menus_table.CONTENT_TYPE;
         }else
             throw new UnsupportedOperationException("Unknown uri :" + uri );
@@ -54,8 +50,8 @@ public class MenusProvider extends ContentProvider
     private int match_uri(Uri uri)
     {
         String link = uri.toString();
-        if(link.contentEquals(DatabaseContract.menus_table.buildMenuWithDate().toString()))
-            return MENUS_WITH_DATE;
+        if(link.contentEquals(DatabaseContract.menus_table.buildMenu().toString()))
+            return MENUS;
         return -1;
     }
     @Override
@@ -64,26 +60,7 @@ public class MenusProvider extends ContentProvider
         Cursor retCursor;
         int match = match_uri(uri);
         retCursor = mOpenHelper.getReadableDatabase().query(DatabaseContract.MENUS_TABLE,
-                projection, MENUS_BY_DATE, selectionArgs, null, null, sortOrder);
-//        switch (match)
-//        {
-//            case MATCHES: retCursor = mOpenHelper.getReadableDatabase().query(
-//                    DatabaseContract.SCORES_TABLE,
-//                    projection,null,null,null,null,sortOrder); break;
-//            case MATCHES_WITH_DATE:
-//                //Log.v(FetchScoreTask.LOG_TAG,selectionArgs[1]);
-//                //Log.v(FetchScoreTask.LOG_TAG,selectionArgs[2]);
-//                retCursor = mOpenHelper.getReadableDatabase().query(
-//                        DatabaseContract.SCORES_TABLE,
-//                        projection,SCORES_BY_DATE,selectionArgs,null,null,sortOrder); break;
-//            case MATCHES_WITH_ID: retCursor = mOpenHelper.getReadableDatabase().query(
-//                    DatabaseContract.SCORES_TABLE,
-//                    projection,SCORES_BY_ID,selectionArgs,null,null,sortOrder); break;
-//            case MATCHES_WITH_LEAGUE: retCursor = mOpenHelper.getReadableDatabase().query(
-//                    DatabaseContract.SCORES_TABLE,
-//                    projection,SCORES_BY_LEAGUE,selectionArgs,null,null,sortOrder); break;
-//            default: throw new UnsupportedOperationException("Unknown Uri" + uri);
-//        }
+                projection, null, null, null, null, sortOrder);
         retCursor.setNotificationUri(getContext().getContentResolver(),uri);
         return retCursor;
     }
@@ -97,11 +74,11 @@ public class MenusProvider extends ContentProvider
     public int bulkInsert(Uri uri, ContentValues[] values)
     {
         SQLiteDatabase db = mOpenHelper.getWritableDatabase();
-        //db.delete(DatabaseContract.SCORES_TABLE,null,null);
-        //Log.v(FetchScoreTask.LOG_TAG,String.valueOf(muriMatcher.match(uri)));
+        db.delete(DatabaseContract.MENUS_TABLE,null,null);
+//        Log.v(FetchScoreTask.LOG_TAG,String.valueOf(muriMatcher.match(uri)));
         switch (match_uri(uri))
         {
-            case MENUS_WITH_DATE:
+            case MENUS:
                 db.beginTransaction();
                 int returncount = 0;
                 try

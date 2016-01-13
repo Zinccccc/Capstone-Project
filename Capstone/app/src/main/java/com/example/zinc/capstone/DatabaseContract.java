@@ -9,7 +9,12 @@ import android.provider.BaseColumns;
  */
 public class DatabaseContract
 {
+    //URI data
+    public static final String CONTENT_AUTHORITY = "zinc.capstone";
+    public static final String PATH = "menus";
+    public static Uri BASE_CONTENT_URI = Uri.parse("content://"+CONTENT_AUTHORITY);
     public static final String MENUS_TABLE = "menus_table";
+
     public static final class menus_table implements BaseColumns
     {
         //Table data
@@ -25,13 +30,10 @@ public class DatabaseContract
         public static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH;
 
-        public static Uri buildMenuWithDate()
+        public static Uri buildMenu()
         {
-            return BASE_CONTENT_URI.buildUpon().appendPath("date").build();
+            System.out.println("Uri  : " + BASE_CONTENT_URI.buildUpon().build().toString());
+            return BASE_CONTENT_URI.buildUpon().build();
         }
     }
-    //URI data
-    public static final String CONTENT_AUTHORITY = "zinc.capstone";
-    public static final String PATH = "menus";
-    public static Uri BASE_CONTENT_URI = Uri.parse("content://"+CONTENT_AUTHORITY);
 }

@@ -1,5 +1,7 @@
 package com.example.zinc.capstone;
 
+import android.content.ContentValues;
+import android.content.Context;
 import android.os.AsyncTask;
 
 import com.example.zinc.myapplication.backend.myApi.MyApi;
@@ -13,16 +15,18 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  * Created by zinc on 16. 1. 12..
  */
 //reference : https://github.com/GoogleCloudPlatform/gradle-appengine-templates/tree/master/HelloEndpoints
-class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
+class EndPointsAsyncTask extends AsyncTask<Context, Void, String> {
     private static MyApi myApiService = null;
 
+    Context mContext = null;
     @Override
-    protected String doInBackground(Void... params) {
+    protected String doInBackground(Context... params) {
         if (myApiService == null) {  // Only do this once
             MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
                     new AndroidJsonFactory(), null)
@@ -40,6 +44,7 @@ class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
 
             myApiService = builder.build();
         }
+        mContext = params[0];
 
         try {
             return myApiService.getMenuJSON().execute().getData();
@@ -50,6 +55,7 @@ class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
+        Menu menu;
         Gson gson = new Gson();
 
         System.out.println("MainActivity " + result);
@@ -59,10 +65,23 @@ class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
                 new TypeToken<ArrayList<Menu>>() {
                 }.getType());
 
+        Vector<ContentValues> values = new Vector <ContentValues> (menuList.size());
         for(int i = 0; i < menuList.size(); i++){
-            System.out.println("getMenu : " + menuList.get(i).getMenu());
-        }
+            menu = menuList.get(i);
 
+            ContentValues menu_values = new ContentValues();
+            menu_values.put(DatabaseContract.menus_table.DATE, menu.getDate());
+            menu_values.put(DatabaseContract.menus_table.TIME, menu.getTime());
+            menu_values.put(DatabaseContract.menus_table.TYPE, menu.getCafeteria_type());
+            menu_values.put(DatabaseContract.menus_table.MENU, menu.getMenu());
+            menu_values.put(DatabaseContract.menus_table.PRICE, menu.getPrice());
+            values.add(menu_values);
+        }
+        int inserted_data = 0;
+        ContentValues[] insert_data = new ContentValues[values.size()];
+        values.toArray(insert_data);
+        inserted_data = mContext.getContentResolver().bulkInsert(
+                DatabaseContract.BASE_CONTENT_URI,insert_data);
     }
     public static Object fromJson(String jsonString, Type type) {
         return new Gson().fromJson(jsonString, type);
