@@ -68,4 +68,7 @@
     <string name="about_this_app">This app was made for Udacity Android Capstone project;</string>
     <string name="email_address">velocity2772@gmail.com</string>
     <string name="title_activity_about">About this App</string>
+
+    <string name="action_share">Share</string>
+
 </resources>
